@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "NxExpressInit",
+  "title": "Init Express Plugin",
+  "description": "Init Express Plugin.",
+  "type": "object",
+  "properties": {
+    "skipFormat": {
+      "description": "Skip formatting files.",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

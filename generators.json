@@ -1,0 +1,21 @@
+{
+  "generators": {
+    "application": {
+      "factory": "./src/generators/application/application.generator",
+      "schema": "./src/generators/application/schema.json",
+      "description": "Create a Loopback4 application."
+    },
+    "init": {
+      "factory": "./src/generators/init/init.generator",
+      "schema": "./src/generators/init/schema.json",
+      "description": "Initialize the `nx-loopback4` plugin.",
+      "hidden": true
+    },
+    "setup-docker": {
+      "factory": "./src/generators/setup-docker/setup-docker.generator",
+      "schema": "./src/generators/setup-docker/schema.json",
+      "description": "Set up Docker configuration for a project.",
+      "hidden": true
+    }
+  }
+}
