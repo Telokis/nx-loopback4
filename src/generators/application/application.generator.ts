@@ -36,37 +36,44 @@ function getBuildConfig(
   options: NormalizedSchema,
 ): TargetConfiguration {
   return {
-    executor: "nx-loopback4:build",
+    executor: "@nx/js:tsc",
     outputs: ["{options.outputPath}"],
-    defaultConfiguration: "production",
     options: {
       outputPath: joinPathFragments("dist", options.appProjectRoot),
       main: joinPathFragments(project.sourceRoot, "main.ts"),
       tsConfig: joinPathFragments(options.appProjectRoot, "tsconfig.app.json"),
-    },
-    configurations: {
-      development: {},
-      production: {
-        ...(options.docker && { generateLockfile: true }),
-      },
+      assets: [
+        {
+          glob: "**",
+          input: joinPathFragments(options.appProjectRoot, "public"),
+          output: "public",
+        },
+      ],
+      clean: true,
     },
   };
 }
 
 function getServeConfig(options: NormalizedSchema): TargetConfiguration {
   return {
-    executor: "nx-loopback4:serve",
-    defaultConfiguration: "development",
+    executor: "@nx/js:node",
     options: {
       buildTarget: `${options.name}:build`,
+      port: options.port,
+      watch: false,
+      inspect: false,
     },
-    configurations: {
-      development: {
-        buildTarget: `${options.name}:build:development`,
-      },
-      production: {
-        buildTarget: `${options.name}:build:production`,
-      },
+  };
+}
+
+function getWatchConfig(options: NormalizedSchema): TargetConfiguration {
+  return {
+    executor: "@nx/js:node",
+    options: {
+      buildTarget: `${options.name}:build`,
+      port: options.port,
+      watch: true,
+      inspect: false,
     },
   };
 }
@@ -82,6 +89,7 @@ function addProject(tree: Tree, options: NormalizedSchema) {
 
   project.targets.build = getBuildConfig(project, options);
   project.targets.serve = getServeConfig(options);
+  project.targets.watch = getWatchConfig(options);
 
   addProjectConfiguration(tree, options.name, project, true);
 }

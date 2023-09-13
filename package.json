@@ -1,6 +1,6 @@
 {
   "name": "nx-loopback4",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "e2e": "nx run e2e:e2e"
@@ -9,6 +9,11 @@
     "@nx/devkit": "16.8.1",
     "@swc/helpers": "~0.5.0",
     "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@nx/js": ">=16.8.1",
+    "@nx/linter": ">=16.8.1",
+    "nx": ">=16.8.1"
   },
   "devDependencies": {
     "@nx/eslint-plugin": "16.8.1",

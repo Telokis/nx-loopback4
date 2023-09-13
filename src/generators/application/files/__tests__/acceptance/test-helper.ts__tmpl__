@@ -1,4 +1,4 @@
-import {<%= applicationClassName %>} from '../..';
+import {<%= applicationClassName %>} from '../../src/index';
 import {
   createRestAppClient,
   givenHttpServerConfig,

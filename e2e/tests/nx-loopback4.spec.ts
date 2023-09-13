@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { join, dirname } from "path";
-import { mkdirSync, rmSync, statSync, writeFileSync } from "fs";
+import { mkdirSync, rmSync, statSync, writeFileSync, readdirSync } from "fs";
 
 describe("nx-loopback4", () => {
   let projectDirectory: string;
@@ -41,6 +41,98 @@ describe("nx-loopback4", () => {
     });
 
     expect(statSync(join(projectDirectory, "apps/my-test/project.json")).isFile()).toBeTruthy();
+
+    expect(readdirSync(join(projectDirectory, "apps/my-test"))).toMatchInlineSnapshot(`
+      [
+        ".eslintrc.json",
+        "project.json",
+        "public",
+        "src",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "__tests__",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "apps/my-test/src"))).toMatchInlineSnapshot(`
+      [
+        "application.ts",
+        "controllers",
+        "datasources",
+        "main.ts",
+        "migrate.ts",
+        "models",
+        "openapi-spec.ts",
+        "repositories",
+        "sequence.ts",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "apps/my-test/public"))).toMatchInlineSnapshot(`
+      [
+        "index.html",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "apps/my-test/src/controllers")))
+      .toMatchInlineSnapshot(`
+      [
+        "index.ts",
+        "ping.controller.ts",
+        "README.md",
+      ]
+    `);
+  });
+
+  it("should build the default application", () => {
+    // npm ls will fail if the package is not installed properly
+    execSync("npx nx run myTest:build", {
+      cwd: projectDirectory,
+    });
+
+    expect(statSync(join(projectDirectory, "dist/apps/my-test")).isDirectory()).toBeTruthy();
+
+    expect(readdirSync(join(projectDirectory, "dist/apps/my-test"))).toMatchInlineSnapshot(`
+      [
+        "package.json",
+        "public",
+        "src",
+        "tsconfig.tsbuildinfo",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "dist/apps/my-test/src"))).toMatchInlineSnapshot(`
+      [
+        "application.d.ts",
+        "application.js",
+        "application.js.map",
+        "controllers",
+        "main.d.ts",
+        "main.js",
+        "main.js.map",
+        "migrate.d.ts",
+        "migrate.js",
+        "migrate.js.map",
+        "openapi-spec.d.ts",
+        "openapi-spec.js",
+        "openapi-spec.js.map",
+        "sequence.d.ts",
+        "sequence.js",
+        "sequence.js.map",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "dist/apps/my-test/public"))).toMatchInlineSnapshot(`
+      [
+        "index.html",
+      ]
+    `);
+    expect(readdirSync(join(projectDirectory, "dist/apps/my-test/src/controllers")))
+      .toMatchInlineSnapshot(`
+      [
+        "index.d.ts",
+        "index.js",
+        "index.js.map",
+        "ping.controller.d.ts",
+        "ping.controller.js",
+        "ping.controller.js.map",
+      ]
+    `);
   });
 });
 
